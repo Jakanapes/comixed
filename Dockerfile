@@ -38,6 +38,8 @@ RUN mkdir ~/comixed
 COPY ./ ~/comixed
 WORKDIR ~/comixed
 
+RUN mvn clean package
+
 EXPOSE 7171
 
-# RUN mvn clean package
+CMD java -jar comixed-app/target/comixed-app-*.jar
