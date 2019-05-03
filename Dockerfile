@@ -5,8 +5,9 @@ MAINTAINER Patrick Sharp "jakanapes@gmail.com"
 ENV MAVEN_VERSION 3.6.0
 
 RUN echo deb http://archive.ubuntu.com/ubuntu precise universe > /etc/apt/sources.list.d/universe.list
-RUN apt-get update && apt-get install -y wget git curl zip monit openssh-server git iptables ca-certificates daemon net-tools libfontconfig-dev
+RUN apt-get update && apt-get install -y wget git curl zip monit openssh-server git iptables ca-certificates daemon net-tools libfontconfig-dev chromium-browser
 
+ENV CHROME_BIN="/usr/bin/chromium-browser"
 # Maven related
 # -------------
 ENV MAVEN_ROOT /var/lib/maven
@@ -30,8 +31,13 @@ RUN rm /bin/sh && ln -s /bin/bash /bin/sh
 RUN curl https://raw.githubusercontent.com/creationix/nvm/v0.34.0/install.sh | bash \
     && source ~/.nvm/nvm.sh \
     && nvm install 10.15.3 \
-    && npm install -g yarn
+    && npm install -g yarn \
+    && npm install -g is-docker
 
 RUN mkdir ~/comixed
 COPY ./ ~/comixed
 WORKDIR ~/comixed
+
+EXPOSE 7171
+
+# RUN mvn clean package

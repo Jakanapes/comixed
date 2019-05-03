@@ -63,6 +63,7 @@
     "angular-ide": "^0.9.43",
     "awesome-typescript-loader": "^5.2.1",
     "codelyzer": "^4.5.0",
+    "is-docker": "2.0.0",
     "jasmine-core": "~2.8.0",
     "jasmine-spec-reporter": "~4.2.1",
     "karma": "^2.0.5",
