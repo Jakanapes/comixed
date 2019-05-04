@@ -42,4 +42,4 @@ RUN mvn clean package
 
 EXPOSE 7171
 
-CMD java -jar comixed-app/target/comixed-app-*.jar
+CMD ["java", "-jar", "comixed-app/target/comixed-app-*.jar"]
