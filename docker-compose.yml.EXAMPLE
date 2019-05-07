@@ -6,7 +6,7 @@ services:
       context: .
     volumes:
       - {/PATH/TO/COMICS}:/comic_data
-      - comixed_db:/home/root/.comixed/comixed
+      - comixed_db:/root/.comixed/comixed
     ports:
       - 7171:7171
 volumes:
