@@ -67,3 +67,6 @@ testem.log
 Thumbs.db
 java-backend/.vscode/launch.json
 java-backend/.vscode/launch.test.json
+
+
+docker-compose.yml
