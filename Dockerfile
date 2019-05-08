@@ -1,45 +1,25 @@
-FROM idoall/ubuntu16.04-jdk
+FROM node:10.15.3-alpine
 
 MAINTAINER Patrick Sharp "jakanapes@gmail.com"
 
-ENV MAVEN_VERSION 3.6.0
+RUN npm install -g is-docker
 
-RUN echo deb http://archive.ubuntu.com/ubuntu precise universe > /etc/apt/sources.list.d/universe.list
-RUN apt-get update && apt-get install -y wget git curl zip monit openssh-server git iptables ca-certificates daemon net-tools libfontconfig-dev chromium-browser
+RUN apk --no-cache add openjdk8 maven chromium
+ENV JAVA_HOME=/usr/lib/jvm/java-1.8-openjdk
+ENV PATH="$JAVA_HOME/bin:${PATH}"
+ENV CHROME_BIN=/usr/bin/chromium-browser
 
-ENV CHROME_BIN="/usr/bin/chromium-browser"
-# Maven related
-# -------------
-ENV MAVEN_ROOT /var/lib/maven
-ENV MAVEN_HOME $MAVEN_ROOT/apache-maven-$MAVEN_VERSION
-ENV MAVEN_OPTS -Xms256m -Xmx512m
-
-RUN echo "# Installing Maven " && echo ${MAVEN_VERSION} && \
-    wget --no-verbose -O /tmp/apache-maven-$MAVEN_VERSION.tar.gz \
-    http://archive.apache.org/dist/maven/maven-3/$MAVEN_VERSION/binaries/apache-maven-$MAVEN_VERSION-bin.tar.gz && \
-    mkdir -p $MAVEN_ROOT && \
-    tar xzf /tmp/apache-maven-$MAVEN_VERSION.tar.gz -C $MAVEN_ROOT && \
-    ln -s $MAVEN_HOME/bin/mvn /usr/local/bin && \
-    rm -f /tmp/apache-maven-$MAVEN_VERSION.tar.gz
-
-VOLUME /var/lib/maven
-
-# Node related
-# ------------
-RUN rm /bin/sh && ln -s /bin/bash /bin/sh
-
-RUN curl https://raw.githubusercontent.com/creationix/nvm/v0.34.0/install.sh | bash \
-    && source ~/.nvm/nvm.sh \
-    && nvm install 10.15.3 \
-    && npm install -g yarn \
-    && npm install -g is-docker
-
-RUN mkdir ~/comixed
-COPY ./ ~/comixed
-WORKDIR ~/comixed
+RUN mkdir /comixed && mkdir /app
+COPY ./ /comixed
+WORKDIR /comixed
 
 RUN mvn clean package
 
-EXPOSE 7171
+RUN mv comixed-app/target/comixed-app-*.jar /app/comixed-app.jar
+WORKDIR /app
+RUN rm -r /comixed
 
-CMD ["java", "-jar", "comixed-app/target/comixed-app-*.jar"]
+EXPOSE 7171
+VOLUME /comic_data
+
+CMD ["java", "-jar", "/app/comixed-app.jar"]

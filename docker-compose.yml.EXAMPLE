@@ -1,12 +1,12 @@
 version: '3.3'
 services:
   comixed:
-    image: jakanapes/comixed:initial
+    image: jakanapes/comixed:1.0.0
     build:
       context: .
     volumes:
       - {/PATH/TO/COMICS}:/comic_data
-      - comixed_db:/root/.comixed/comixed
+      - comixed_db:/root/.comixed
     ports:
       - 7171:7171
 volumes:
